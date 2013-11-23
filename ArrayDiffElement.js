@@ -9,15 +9,15 @@
 		}
 	
 		ArrayDiffElement.prototype.added = function() {
-			return oldIndex === undefined;
+			return this.oldIndex === undefined;
 		};
 	
 		ArrayDiffElement.prototype.removed = function() {
-			return newIndex === undefined;
+			return this.newIndex === undefined;
 		};
 	
 		ArrayDiffElement.prototype.common = function() {
-			return oldIndex !== undefined && newIndex !== undefined;
+			return this.oldIndex !== undefined && this.newIndex !== undefined;
 		};
 		
 		return ArrayDiffElement;
