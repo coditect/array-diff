@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ArrayDiff Demo</title>
+	<meta charset="utf8"/>
+	<style>
+		
+		body {
+			font-family: sans-serif;
+			margin: 1em;
+		}
+		
+		p {
+			line-height: 1.5;
+			margin: 2em 0;
+		}
+		
+		table {
+			border-collapse: collapse;
+			line-height: 2;
+		}
+		
+		th {
+			padding: 0 1em 0 0;
+			text-align: left;
+		}
+		
+		input {
+			display: block;
+			font-family: inherit;
+			font-size: inherit;
+			height: 2em;
+			margin: 0;
+			padding: 0 0.5em;
+			width: 16em;
+		}
+		
+		button {
+			display: block;
+			margin: 1em 0;
+			width: 100%;
+		}
+		
+		td {
+			border: 1px solid #000;
+			min-width: 2em;
+			padding: 0;
+			text-align: center;
+		}
+		
+		.added   {background-color: #cfc}
+		.removed {background-color: #fcc}
+		
+		.old .added   {color: #9c9}
+		.new .removed {color: #c99}
+		
+	</style>
+	<script src="ArrayDiffElement.js"></script>
+	<script src="ArrayDiff.js"></script>
+	<script>
+	
+		window.onload = function() {
+	
+			var table = document.getElementsByTagName('table')[0],
+				newInput = document.getElementById('new'),
+				oldInput = document.getElementById('old');
+			
+			function clearTable() {
+				var cells = document.getElementsByTagName('td');
+				while (cells.length > 0) {
+					cells[0].parentNode.removeChild(cells[0]);
+				}
+			}
+			
+			function addCell(row, content, className) {
+				var element = document.createElement('td');
+				element.textContent = content;
+				element.className = className;
+				table.rows[row].appendChild(element);
+			}
+			
+			function getDiff() {
+				clearTable();
+				var arrayDiff = new ArrayDiff(newInput.value, oldInput.value);
+				
+				for (var i = 0; i < arrayDiff.diff.length; i++) {
+				
+					if (arrayDiff.diff[i].added()) {
+						addCell(0, '∅', 'added');
+						addCell(1, '+', 'added');
+						addCell(2, arrayDiff.diff[i].item, 'added');
+					}
+					else if (arrayDiff.diff[i].removed()) {
+						addCell(0, arrayDiff.diff[i].item, 'removed');
+						addCell(1, '−', 'removed');
+						addCell(2, '∅', 'removed');
+					}
+					else {
+						addCell(0, arrayDiff.diff[i].item, '');
+						addCell(1, '↓', '');
+						addCell(2, arrayDiff.diff[i].item, '');
+					}
+				}
+			}
+			
+			newInput.onkeyup = getDiff;
+			oldInput.onkeyup = getDiff;
+			getDiff();
+		};
+		
+	</script>
+</head>
+<body>
+	<h1>ArrayDiff Demo</h1>
+	<p>ArrayDiff computes the difference between two JavaScript arrays (as well as any other object that uses numeric subscripts, such as a string or DOMNodeList) by finding the longest common subsequence between them. The result can be used to visualize the transformation of one array to another, as demonstrated below.</p>
+	<table>
+		<tr class="old">
+			<th><label for="old">Old</label></th>
+			<th><input type="text" id="old" value="nematode knowledge"/></th>
+		</tr>
+		<tr>
+			<th colspan="2"></th>
+		</tr>
+		<tr class="new">
+			<th><label for="new">New</label></th>
+			<th><input type="text" id="new" value="empty bottle"/></th>
+		</tr>
+	</table>
+</body>
+</html>
