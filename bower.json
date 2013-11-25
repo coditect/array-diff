@@ -1,5 +1,5 @@
 {
-	"name": "ArrayDiff",
+	"name": "array-diff",
 	"version": "1.0.0",
 	"description": "Computes the difference between two JavaScript arrays by finding the longest common subsequence between them.",
 	"keywords": ["array", "diff", "difference", "lcs"],
